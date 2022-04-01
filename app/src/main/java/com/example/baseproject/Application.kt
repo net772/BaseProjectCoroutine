@@ -18,7 +18,8 @@ class Application: Application() {
                 coroutineModule,
                 networkModule,
                 useCaseModule,
-                viewModelModule
+                viewModelModule,
+                repositoryModule
             )
         }
     }
