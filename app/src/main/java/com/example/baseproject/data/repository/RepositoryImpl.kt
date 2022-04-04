@@ -10,7 +10,12 @@ class RepositoryImpl(
     private val ioDispatcher: CoroutineDispatcher
 ) : Repository {
     override suspend fun getProductList(): List<ProductResponse> = withContext(ioDispatcher) {
-        TODO("Not yet implemented")
+        val response = productApi.getProducts()
+        return@withContext if (response.isSuccessful) {
+            response.body()?.items ?: listOf()
+        } else {
+            listOf()
+        }
     }
 
     override suspend fun getLocalProductList(): List<ProductResponse> = withContext(ioDispatcher) {

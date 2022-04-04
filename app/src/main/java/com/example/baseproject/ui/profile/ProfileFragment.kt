@@ -6,13 +6,15 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileBinding>() {
 
+    companion object {
+        const val TAG = "ProfileFragment"
+    }
+
     override val viewModel by viewModel<ProfileViewModel>()
 
     override fun getViewBinding(): FragmentProfileBinding =
         FragmentProfileBinding.inflate(layoutInflater)
 
-    override fun observeData() {
-        TODO("Not yet implemented")
-    }
+    override fun observeData() = Unit
 
 }
