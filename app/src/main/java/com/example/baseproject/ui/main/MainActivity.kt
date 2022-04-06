@@ -10,7 +10,7 @@ import com.example.baseproject.ui.BaseFragment
 import com.example.baseproject.ui.list.ProductListFragment
 import com.example.baseproject.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseActivity<MainViewModel, ActivityMainBinding>(), BottomNavigationView.OnNavigationItemSelectedListener {
 

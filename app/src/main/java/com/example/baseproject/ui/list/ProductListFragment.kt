@@ -1,13 +1,15 @@
 package com.example.baseproject.ui.list
 
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.os.Bundle
 import androidx.core.view.isGone
+import com.example.baseproject.R
+import com.example.baseproject.data.Response.ProductResponse
 import com.example.baseproject.databinding.FragmentProductListBinding
+import com.example.baseproject.extentions.SingleToast.showToast
 import com.example.baseproject.ui.BaseFragment
 import com.example.baseproject.ui.adapter.ProductListAdapter
-import com.example.baseproject.ui.profile.ProfileViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.example.baseproject.ui.detail.ProductDetailFragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductListFragment : BaseFragment<ProductListViewModel, FragmentProductListBinding>() {
     companion object {
@@ -15,29 +17,27 @@ class ProductListFragment : BaseFragment<ProductListViewModel, FragmentProductLi
     }
 
     private val adapter = ProductListAdapter()
+    private val productDetailFragment by lazy {
+        ProductDetailFragment()
+    }
 
     override val viewModel by viewModel<ProductListViewModel>()
-
-    private val startProductDetailForResult =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-
-        }
 
     override fun getViewBinding(): FragmentProductListBinding = FragmentProductListBinding.inflate(layoutInflater)
 
 
     override fun observeData() {
-        viewModel.productListStateLiveData.observe(this) {
-            when (it) {
-                is ProductListState.UnInitialized -> {
-                    initViews()
-                }
-
-                is ProductListState.Success -> {
-                    handleSuccessState(it)
-                }
+        viewModel.productListStateLiveData.onUiState (
+            loading = {
+                initViews()
+            },
+            error = {
+                showToast(R.string.network_error)
+            },
+            success = { data ->
+                handleSuccessState(data)
             }
-        }
+        )
     }
 
     private fun initViews() = with(binding) {
@@ -48,20 +48,22 @@ class ProductListFragment : BaseFragment<ProductListViewModel, FragmentProductLi
         }
     }
 
-    private fun handleSuccessState(state: ProductListState.Success) = with(binding){
-        refreshLayout.isEnabled = state.productList.isNotEmpty()
+    private fun handleSuccessState(data: List<ProductResponse>) = with(binding) {
+        refreshLayout.isEnabled = data.isNotEmpty()
         refreshLayout.isRefreshing = false
 
-        if (state.productList.isEmpty()) {
+        if (data.isEmpty()) {
             emptyResultTextView.isGone = false
             recyclerView.isGone = true
         } else {
             emptyResultTextView.isGone = true
             recyclerView.isGone = false
-            adapter.setProductList(state.productList) {
-                startProductDetailForResult.launch(
-                   // ProductDetailActivity.newIntent(requireContext(), it.id)
-                )
+            adapter.setProductList(data) { list ->
+                val bundle = Bundle().also {
+                    it.putString("PRODUCT_ID_KEY", list.id)
+                }
+                productDetailFragment.arguments = bundle
+                addFragment(R.id.fragmentContainer, productDetailFragment, true)
             }
         }
     }

@@ -2,7 +2,7 @@ package com.example.baseproject.ui.profile
 
 import com.example.baseproject.databinding.FragmentProfileBinding
 import com.example.baseproject.ui.BaseFragment
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProfileFragment : BaseFragment<ProfileViewModel, FragmentProfileBinding>() {
 

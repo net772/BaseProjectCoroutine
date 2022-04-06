@@ -1,9 +1,10 @@
 package com.example.baseproject.data.repository
 
 import com.example.baseproject.data.Response.ProductResponse
+import kotlinx.coroutines.flow.Flow
 
 interface Repository {
-    suspend fun getProductList(): List<ProductResponse>
+    fun getProductList(): Flow<List<ProductResponse>>
 
     suspend fun getLocalProductList(): List<ProductResponse>
 

@@ -1,5 +1,6 @@
 package com.example.baseproject.ui.detail
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,9 +11,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel (
-    private val productId: Long,
+    private val productId: String,
+    app: Application,
     private val getProductItemUseCase: GetProductItemUseCase
-): BaseViewModel() {
+): BaseViewModel(app) {
 
     private var _productDetailState = MutableLiveData<ProductDetailState>(ProductDetailState.UnInitialized)
     val productDetailState: LiveData<ProductDetailState> = _productDetailState
@@ -20,7 +22,7 @@ class ProductDetailViewModel (
 
     override fun fetchData(): Job = viewModelScope.launch {
         setState(ProductDetailState.Loading)
-        getProductItemUseCase(productId)?.let { product ->
+        getProductItemUseCase(productId.toLong())?.let { product ->
             setState(
                 ProductDetailState.Success(product)
             )

@@ -12,4 +12,7 @@
     <string name="google_login_required">구글로그인이 필요합니다.</string>
     <string name="order">주문하기</string>
     <string name="logout">로그아웃</string>
+
+    <!--네트워크-->
+    <string name="network_error">연결에 실패하였습니다.\n다시 시도해주세요.</string>
 </resources>
