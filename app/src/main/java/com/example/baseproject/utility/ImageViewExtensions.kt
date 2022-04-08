@@ -18,7 +18,7 @@ fun ImageView.loadCenterCrop(url: String, corner: Float = 0f) {
         .transition(DrawableTransitionOptions.withCrossFade(factory))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .apply {
-            if (corner > 0) transforms(CenterCrop(), RoundedCorners(corner.fromDpToPx()))
+            if (corner > 0) transform(CenterCrop(), RoundedCorners(corner.fromDpToPx()))
         }
         .into(this)
 }
@@ -29,7 +29,7 @@ fun ImageView.load(url: String, corner: Float = 0f) {
         .transition(DrawableTransitionOptions.withCrossFade(factory))
         .diskCacheStrategy(DiskCacheStrategy.ALL)
         .apply {
-            if (corner > 0) transforms(RoundedCorners(corner.fromDpToPx()))
+            if (corner > 0) transform(RoundedCorners(corner.fromDpToPx()))
         }
         .into(this)
 }

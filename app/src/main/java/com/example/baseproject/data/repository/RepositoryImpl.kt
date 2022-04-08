@@ -31,14 +31,10 @@ class RepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getProductItem(itemId: Long): ProductResponse?  {
-//        val response = productApi.getProduct(itemId)
-//        return@withContext if (response.isSuccessful) {
-//            response.body()
-//        } else {
-//            null
-//        }
-        TODO("Not yet implemented")
+    override fun getProductItem(itemId: Long): Flow<ProductResponse> = flow {
+        emit(productApi.getProduct(itemId))
+    }.map {
+        it
     }
 
     override suspend fun deleteAll() {

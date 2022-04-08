@@ -71,7 +71,6 @@ abstract class BaseFragment<VM: BaseViewModel, VB: ViewBinding>: Fragment() {
             if(backStack) transaction.addToBackStack(null)
             transaction.replace( containerViewId, mFragment)
             transaction.commitAllowingStateLoss()
-
         }
     }
 

@@ -11,5 +11,5 @@ interface ApiService {
     suspend fun getProducts(): ProductsResponse
 
     @GET("products/{productId}")
-    suspend fun getProduct(@Path("productId") productId: Long): Response<ProductResponse>
+    suspend fun getProduct(@Path("productId") productId: Long): ProductResponse
 }

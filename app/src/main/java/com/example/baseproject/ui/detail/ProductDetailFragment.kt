@@ -2,7 +2,10 @@ package com.example.baseproject.ui.detail
 
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.example.baseproject.R
+import com.example.baseproject.data.Response.ProductResponse
 import com.example.baseproject.databinding.FragmentProductDetailBinding
+import com.example.baseproject.extentions.SingleToast.showToast
 import com.example.baseproject.ui.BaseFragment
 import com.example.baseproject.utility.load
 import com.example.baseproject.utility.loadCenterCrop
@@ -26,28 +29,31 @@ class ProductDetailFragment : BaseFragment<ProductDetailViewModel, FragmentProdu
     override fun getViewBinding(): FragmentProductDetailBinding = FragmentProductDetailBinding.inflate(layoutInflater)
 
 
-    override fun observeData() = viewModel.productDetailState.observe(this) {
-        when (it) {
-            is ProductDetailState.Success -> handleSuccess(it)
-            is ProductDetailState.Error ->handleError()
-        }
+    override fun observeData() {
+        viewModel.productDetailState.onUiState (
+            error = { handleError() },
+            loading = { handleLoading() },
+            success = {
+                handleSuccess(it)
+            }
+         )
     }
 
     private fun handleLoading() = with(binding) {
         progressBar.isVisible = true
     }
 
-    private fun handleSuccess(state: ProductDetailState.Success) = with(binding) {
+    private fun handleSuccess(data: ProductResponse) = with(binding) {
         progressBar.isGone = true
-        val product = state.productEntity
+        val product = data
         productCategoryTextView.text = product.productType
         productImageView.loadCenterCrop(product.productImage, 8f)
         productPriceTextView.text = "${product.productPrice}원"
-        introductionImageView.load(state.productEntity.productImage)
+        introductionImageView.load(product.productImage)
     }
 
     private fun handleError() {
-        requireContext().toast("제품 정보를 불러올 수 없습니다.")
+        showToast("제품 정보를 불러올 수 없습니다.")
     }
 
 

@@ -14,7 +14,7 @@ interface Repository {
 
     suspend fun updateProductItem(ProductItem: ProductResponse)
 
-    suspend fun getProductItem(itemId: Long): ProductResponse?
+    fun getProductItem(itemId: Long): Flow<ProductResponse>?
 
     suspend fun deleteAll()
 

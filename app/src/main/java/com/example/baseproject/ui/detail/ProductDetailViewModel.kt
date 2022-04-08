@@ -6,8 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.baseproject.data.Response.ProductResponse
 import com.example.baseproject.domain.usecase.GetProductItemUseCase
+import com.example.baseproject.state.ResultState
 import com.example.baseproject.ui.BaseViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel (
@@ -16,24 +19,12 @@ class ProductDetailViewModel (
     private val getProductItemUseCase: GetProductItemUseCase
 ): BaseViewModel(app) {
 
-    private var _productDetailState = MutableLiveData<ProductDetailState>(ProductDetailState.UnInitialized)
-    val productDetailState: LiveData<ProductDetailState> = _productDetailState
-
+    private val _productDetailState = MutableStateFlow<ResultState<ProductResponse>>(ResultState.UnInitialize)
+    val productDetailState = _productDetailState.asStateFlow()
 
     override fun fetchData(): Job = viewModelScope.launch {
-        setState(ProductDetailState.Loading)
-        getProductItemUseCase(productId.toLong())?.let { product ->
-            setState(
-                ProductDetailState.Success(product)
-            )
-        } ?: kotlin.run {
-            setState(ProductDetailState.Error)
+        getProductItemUseCase.invoke(productId.toLong())?.onState {
+            _productDetailState.value = it
         }
-    }
-
-
-
-    private fun setState(state: ProductDetailState) {
-        _productDetailState.postValue(state)
     }
 }
