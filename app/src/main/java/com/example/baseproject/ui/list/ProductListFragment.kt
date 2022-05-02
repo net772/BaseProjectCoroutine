@@ -1,6 +1,7 @@
 package com.example.baseproject.ui.list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.core.view.isGone
 import com.example.baseproject.R
 import com.example.baseproject.data.Response.ProductResponse
@@ -17,9 +18,6 @@ class ProductListFragment : BaseFragment<ProductListViewModel, FragmentProductLi
     }
 
     private val adapter = ProductListAdapter()
-    private val productDetailFragment by lazy {
-        ProductDetailFragment()
-    }
 
     override val viewModel by viewModel<ProductListViewModel>()
 
@@ -59,9 +57,11 @@ class ProductListFragment : BaseFragment<ProductListViewModel, FragmentProductLi
             emptyResultTextView.isGone = true
             recyclerView.isGone = false
             adapter.setProductList(data) { list ->
+                val productDetailFragment = ProductDetailFragment()
                 val bundle = Bundle().also {
                     it.putString("PRODUCT_ID_KEY", list.id)
                 }
+
                 productDetailFragment.arguments = bundle
                 addFragment(R.id.fragmentContainer, productDetailFragment, true)
             }
